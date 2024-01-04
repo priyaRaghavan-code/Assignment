@@ -30,14 +30,6 @@ module EmployeeConcern
                    else
                      (12 - start_date.month + 1) + (end_date.year - start_date.year - 1) * 12 + end_date.month
                    end
-
-    # Exclude partial months for the start and end dates
-    if start_date.day > 1
-      total_months -= 1
-    end
-    if end_date.day < end_date.end_of_month.day
-      total_months -= 1
-    end
     total_salary = total_months * monthly_salary
   end
 
@@ -48,6 +40,7 @@ module EmployeeConcern
     when total_salary <= 500000
       (total_salary - 250000) * 0.05
     when total_salary <= 750000
+      puts total_salary
       12500 + ((total_salary - 500000) * 0.1)
     else
       37500 + ((total_salary - 750000) * 0.2)
