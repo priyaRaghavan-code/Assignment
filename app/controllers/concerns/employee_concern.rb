@@ -4,7 +4,7 @@ module EmployeeConcern
     total_salary = calculate_total_salary(employee.doj, monthly_salary)
     tax_amount = calculate_tax(total_salary)
     cess_amount = calculate_cess(total_salary)
-    yearly_salary = monthly_salary * 12
+    yearly_salary = calculate_yearly_salary(employee.doj, monthly_salary)
     loss_of_pay_per_day = calculate_loss_of_pay_per_day(monthly_salary)
 
     {
@@ -18,6 +18,30 @@ module EmployeeConcern
     }
   end
 
+  def calculate_yearly_salary(date_of_joining, monthly_salary)
+    financial_year_start = Date.new(2023, 4, 1)
+    financial_year_end = Date.new(2024, 3, 31)
+  
+    start_date = [date_of_joining, financial_year_start].max
+    end_date = financial_year_end
+  
+    total_months = if start_date.year == end_date.year
+                     end_date.month - start_date.month + 1
+                   else
+                     (12 - start_date.month + 1) + (end_date.year - start_date.year - 1) * 12 + end_date.month
+                   end
+  
+    if start_date.day > 1
+      total_months -= 1
+    end
+    if end_date.day < end_date.end_of_month.day
+      total_months -= 1
+    end
+    yearly_salary = total_months * monthly_salary
+  
+    yearly_salary
+  end
+  
   def calculate_total_salary(date_of_joining, monthly_salary)
     financial_year_start = Date.new(2023, 4, 1)
     financial_year_end = Date.new(2024, 3, 31)
